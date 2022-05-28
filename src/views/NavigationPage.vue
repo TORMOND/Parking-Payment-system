@@ -1,6 +1,9 @@
 <template>
   <div v-if="user !=null" id="homePage">
-    <div class="tab" v-if="false">
+    <div class="tab">
+      <div class="close">
+        <p @click="untoggleMenu">X</p>
+        </div>
           <ul>
              <li>Transactions</li>
              <li>About</li>
@@ -9,6 +12,49 @@
              <li>LogOut</li>
           </ul>
     </div>
+
+<div class="ticket-details" v-if="ticket">
+  <div class="top-part">
+    <h2>Ticket</h2>
+    <p @click="hideTicket" class="close">X</p>
+  </div>
+  
+  <div class="details">
+  <span>Transaction ID :</span>
+  <p>QW8578984G086</p>
+</div>
+ <div class="details">
+  <span>Vehicle Reg:</span>
+  <p>KDA 001A</p>
+</div>
+ <div class="details">
+  <span>Paid By:</span>
+  <p>Victor Monderu</p>
+</div>
+ <div class="details">
+  <span>Phone Number</span>
+  <p>0790222001</p>
+</div>
+ <div class="details">
+  <span>Location</span>
+  <p>Nairobi Area</p>
+</div>
+ <div class="details">
+  <span>Date:</span>
+  <p>29 April 2022</p>
+</div>
+ <div class="details">
+  <span>Time:</span>
+  <p></p>
+</div>
+ <div class="details">
+  <span>Total Paid Amount</span>
+  <p>Ksh 500</p>
+</div>
+
+</div>
+
+            <div id="container">
     <div class="top-section">
 <nav class="nav-bar">
   <div class="profile">
@@ -27,62 +73,127 @@
 <div class="search-bar">
   <input type="text" placeholder="Search Parking">
   
-    <!-- <font-awesome-icon icon="fa-regular fa-alien-8bit" /> -->
+   <button>
+    <font-awesome-icon icon="magnifying-glass" />
+  </button>
   
 </div>
 </div>
 <div id="main-section">
 <div class="activities">
-  <div class="element1"></div>
-  <div class="element2"></div>
-  <div class="element3"></div>
-  <div class="element4"></div>
-  <div class="element5"></div>
-  <div class="element6"></div>
+
+  <div class="element1" @click="showTicket">
+    <font-awesome-icon class="icon" icon="ticket" />
+    <p>Ticket</p>
+    <span>1 Available</span>
+  </div>
+  <div class="element2">
+    <img src="images.jpg" class="image">
+    <p>Change Parking</p>
+   
+  </div>
+
+  <div class="element3" @click="maps">
+    <font-awesome-icon class="icon" icon="map-location" />
+    <p>Maps</p>
+    <span> Available</span>
+  </div>
+
+  <div class="element4">
+  <font-awesome-icon class="icon" icon="address-card" />
+    <p>History</p>
+    <span>13 Available</span>
+  </div>
+    
 </div>
 
 <div class="payment-section">
   <h4>Select Location</h4>
 <div class="location-details">
 <span>Parking Spot</span>
-<p>Nairobi</p>
+<p>{{location}}</p>
 </div>
 <div class="search-map">
   <button @click="maps">Search map</button>
 </div>
 <div class="price-details">
   <span>Cost Estimate</span>
-  <p>Ksh 390</p>
+  <p>Ksh {{price}}</p>
 </div>
 <button class="pay" @click="pay">Pay</button>
 </div>
 
-<div class="ticket-details">
-  <h2>Ticket</h2>
-<div class="ticket">
-  
+ <div class="admin-details">
+  <h2>Admins</h2>
+
+  <div class="admin-profile">
+    <div class="admin-image">
+    <img src="profilePic.jpg" alt="profile-pic" class="profilepic">
+      <div class="name">Victor Monderu</div>
+      <div class="job-position">0700100100</div>
+      <div class="email">victormonderu@gmail.com</div>
+      <div class="vehicle-registration">KBV 0001A</div>
+
+<div class="btn">
+  <button>Edit Profile</button>
 </div>
+    </div>
+  </div>
+
 </div>
+
+</div>
+
 </div>
   </div>
 </template>
 
 <script>
-import{ app, db, auth, firebaseConfig, user, signInWithEmailAndPassword, signOut, collection, onAuthStateChanged, getDocs } from '@/firebase.js'
+import{ app, db, auth, firebaseConfig, user, signOut, collection, onAuthStateChanged, getDocs } from '@/firebase.js'
 
 export default {
 data() {
   return {
     user:89,
+    ticket:false,
+    name: "",
+    currentUserId: "",
+    profilePic:""
   }
 },
 methods: {
-  noUser:function(){
+  toggleMenu:function(){
+const tab = document.querySelector('.tab');
+tab.style.display = "block";
+const container = document.querySelector('#container');
+container.classList = "selected";
+
+  },
+  untoggleMenu:function(){
+const tab = document.querySelector('.tab');
+tab.style.display = "none";
+const container = document.querySelector('#container');
+container.classList = "";
+  },
+
+noUser:function(){
     if(this.user == null){
       this.$router.push('/');
     }else{
       console.log("user present");
     }
+  },
+
+showTicket:function(){
+    this.ticket = true;
+const container = document.querySelector('#container');
+container.classList = "selected";
+  },
+ hideTicket:function(){
+  this.ticket = false;
+const container = document.querySelector('#container');
+container.classList = "";
+
   },
   pay:function(){
     this.$router.push('/TransactionsPage');
@@ -90,11 +201,19 @@ methods: {
   maps:function(){
 this.$router.push('/MapsPage');
   },
-
 },
 beforeMount(){
     this.noUser();
+    
  },
+ computed:{
+   location(){
+     return this.$store.state.location
+   },
+   price(){
+     return this.$store.state.price
+   }
+ }
 
 }
 </script>
@@ -105,14 +224,35 @@ beforeMount(){
   background: #f0e5ef;
   width: 100%;
   position: relative;
+  height: 100vh;
+}
+#container.selected{
+opacity: 0.2;
+pointer-events: none;
+scroll-behavior:none;
+}
+.top-part{
+  display: flex;
+ justify-content: space-between;
+ padding: 10px;
+}
+.top-part h2{
+  margin: 0 auto;
+}
+.close{
+  border-radius: 50%;
+  cursor: pointer;
+}
+.close:hover{
+background-color: #ceced1;
 }
 .tab{
-display: flex;
+display:none;
 flex-direction: column;
 background: #010620;
 color: #f0e5ef;
-width: 80%;
-height: 100%;
+width: 100%;
+height: 70%;
 position: absolute;
 z-index: 1;
 padding-top: 24px;
@@ -136,8 +276,8 @@ font-weight: 700;
  cursor: pointer;
 }
 .profilepic{
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
 }
 .search-bar{
@@ -146,18 +286,21 @@ font-weight: 700;
   gap: 10px;
 }
 .search-bar button{
+  background: linear-gradient(-135deg, #7d2ce7, #6f6f72); 
   padding: 10px;
   border-radius: 5px;
   border: none;
   color: #fff;
   font-size: 16px;
   font-weight: 600;
+  cursor: pointer;
 }
 input{
   border: none;
   padding: 5px 10px;
   border-radius: 5px;
   outline: none;
+  width: 80%;
 }
 .payment-section{
   /* border-top: 0.5px solid grey; */
@@ -217,26 +360,102 @@ input{
   cursor:pointer;
 }
 .activities{
-  padding: 20px 0;
+  padding: 10px 0;
   display:grid;
   grid-auto-flow:column;
   grid-auto-columns: 27%;
-  /* gap: 10px; */
+   gap: 10px; 
   overflow: auto;
   overscroll-behavior-inline: contain;
   background-color: #fff;
 }
 .activities div{
-  width: 80px;
-  height: 80px;
+  padding-top: 5px;
+  height: 90px;
   border-radius: 3px;
-  background: #3e56cc;
+  background: #f0e5ef;
+  border: 1px solid #3e56cc;
+}
+.icon{
+  font-size: 36px;
+}
+.activities p{
+  font-size: 14px;
+  font-weight: 600;
+}
+.activities span{
+  font-size: 12px;
+  color: #747177;
 }
 .ticket-details{
-  border-top: 0.5px solid grey;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  background-color: #fff;
+  margin-left: 5%;
+  margin-top: 20%;
+  transition: 2s;
+  width: 85%;
+  padding: 24px 10px;
+  border-radius: 5px;
+  box-shadow: 3px 3px 3px #ceced1, 3px 3px 3px #ceced1, 3px 3px 3px #ceced1;
 }
+.ticket-details span{
+  color: #747177;
+  font-size: 14px;
+
+}
+.details{
+  display: flex;
+  justify-content: space-between;
+
+  padding: 10px;
+}
+.element1{
+  /* background-image: url('./images.jpg'); */
+  object-fit: cover;
+  opacity: 0.9;
+}
+.element2{
+  /* background-image: url(./images.jpg); */
+   object-fit: cover;
+  opacity: 0.9;
+}
+.element3{
+  /* background-image: url(./images.jpg); */
+   object-fit: cover;
+  opacity: 0.9;
+}
+.element4{
+  /* background-image: url(./images.jpg); */
+   object-fit: cover;
+  opacity: 0.9;
+}
+.element5{ 
+   object-fit: cover;
+  opacity: 0.9;
+}
+.element6{
+   object-fit: cover;
+  opacity: 0.9;
+}
+.image {
+width: 35px;
+height: 35px;
+border-radius: 50%;
+}
+#main-section{
+  background: #f0e5ef;
+}
+.admin-details{
+    display: none;
+  }
 
 @media all and (min-width:500px){
+  .admin-details{
+    display: block;
+  }
   .top-section{
  background: linear-gradient(-135deg, #7d2ce7, #010620); 
 }
@@ -263,6 +482,36 @@ input{
   margin: 0 auto;
   padding:10px 5px 10px 40px;
   width: 500px;
+}
+.admin-profile{
+  background-color: #fff;
+ box-shadow:  3px 3px 5px #ceced1, 3px 3px 5px #ceced1 ;
+ border-radius: 5px;
+ display: flex;
+ flex-direction: column;
+ padding: 20px 0px;
+ height:300px;
+}
+.name{
+  font-size: 16px;
+  font-weight: 600;
+}
+.job-position{
+  font-size: 12px;
+  color: #65676b;
+}
+.email{
+  font-size: 12px;
+  color: #65676b;
+}
+.btn button{
+  margin-top: 20px;
+ border: none;
+ background-color: #216FD8;
+ color: #fff;
+ padding: 10px 30px;
+ border-radius: 5px;
+ cursor: pointer;
 }
 
 }

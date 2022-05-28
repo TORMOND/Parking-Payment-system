@@ -5,7 +5,7 @@
        <input type="email" required placeholder="Email" v-model="email">
        <input type="password" required placeholder="password" v-model="password">
        <p class="error">{{errors}}</p>
-       <button @click="login">LOGIN</button>
+       <button @click.prevent="login">LOGIN</button>
        <span @click="recoverPassword" class="forgot-password">forgot Password ?</span>
 
 <div class="create-acc">
@@ -36,28 +36,29 @@ console.log("Fill in required details");
  }else{
                  //  Sign in 
      signInWithEmailAndPassword(auth, this.email, this.password).then((userCredential) => {
-    const user = userCredential.user;
-    // console.log(user);
-    // alert("You've Signed in as" + this.mail);
+    // const user = userCredential.user;
       onAuthStateChanged(auth, user => {
-          const querySnapshot = getDocs(collection(db, "user-Details"), {
+          const querySnapshot = getDocs(collection(db, "userDetails"), {
 });
  querySnapshot.then((collection) => {
-  // doc.data() is never undefined for query doc snapshots
   console.log(querySnapshot);
   console.log(collection);
 
-}).catch((error) => {
-  console.log("Error getting document:", error);
+}).catch(() => {
+  console.log("Error getting document:");
  this.errors = "Incorrect Login details";
 
 }); 
 
       console.log(user.email, user.uid);
-      if (user) {
+      if(user.email==="victormonderu@gmail.com"){
+this.$router.push('/AdminPage');
+
+    }else if (user) {
             this.$router.push('/NavigationPage');
             console.log(user);
-    }else{
+    } 
+    else{
         // stop.this.$router.push('/Navigation')
         alert("error");
     }
@@ -117,6 +118,7 @@ cursor: pointer;
 }
 .error{
   color:red;
+  font-size: 12px;
 }
 
 </style>
