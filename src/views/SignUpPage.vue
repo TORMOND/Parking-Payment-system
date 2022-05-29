@@ -8,6 +8,7 @@
 <input type="telephone" placeholder="Phone Number" required v-model="phoneNumber">
 <input type="password" placeholder="Password" required v-model="pass">
 <input type="password" placeholder="confirm password" required v-model="pass2">
+
 <button @click.prevent="createAccount">SIGN UP</button>
 
 <div class="signInPage">

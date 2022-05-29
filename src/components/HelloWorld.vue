@@ -4,7 +4,7 @@
      <form>
        <input type="email" required placeholder="Email" v-model="email">
        <input type="password" required placeholder="password" v-model="password">
-       <p class="error">{{errors}}</p>
+       <p class="error" v-if="errors">{{errors}}</p>
        <button @click.prevent="login">LOGIN</button>
        <span @click="recoverPassword" class="forgot-password">forgot Password ?</span>
 
@@ -24,6 +24,7 @@ export default {
   name: 'HelloWorld',
   data() {
     return {
+      user: 'Victor',
       email: '',
       password: '',
       errors: '',
@@ -38,6 +39,7 @@ console.log("Fill in required details");
      signInWithEmailAndPassword(auth, this.email, this.password).then((userCredential) => {
     // const user = userCredential.user;
       onAuthStateChanged(auth, user => {
+
           const querySnapshot = getDocs(collection(db, "userDetails"), {
 });
  querySnapshot.then((collection) => {
@@ -68,7 +70,8 @@ this.$router.push('/AdminPage');
     },
     signUpPage:function(){
       this.$router.push('/SignUpPage');  
-    }
+    },
+    
   },
 }
 </script>

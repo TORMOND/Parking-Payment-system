@@ -59,7 +59,7 @@
 <nav class="nav-bar">
   <div class="profile">
 <img src="profilePic.jpg" alt="profile-pic" class="profilepic">
-
+<p class="username">Hi {{userEmail}}</p>
   </div>
 
   <div class="menu">
@@ -154,7 +154,7 @@ import{ app, db, auth, firebaseConfig, user, signOut, collection, onAuthStateCha
 export default {
 data() {
   return {
-    user:89,
+    user:"Victor",
     ticket:false,
     name: "",
     currentUserId: "",
@@ -167,7 +167,6 @@ const tab = document.querySelector('.tab');
 tab.style.display = "block";
 const container = document.querySelector('#container');
 container.classList = "selected";
-
   },
   untoggleMenu:function(){
 const tab = document.querySelector('.tab');
@@ -180,7 +179,7 @@ noUser:function(){
     if(this.user == null){
       this.$router.push('/');
     }else{
-      console.log("user present");
+      console.log("user present",this.$store.state.user);
     }
   },
 
@@ -193,7 +192,6 @@ container.classList = "selected";
   this.ticket = false;
 const container = document.querySelector('#container');
 container.classList = "";
-
   },
   pay:function(){
     this.$router.push('/TransactionsPage');
@@ -212,6 +210,13 @@ beforeMount(){
    },
    price(){
      return this.$store.state.price
+   },
+   userInfor(){
+     return this.$store.state.user
+    
+   },
+   userEmail(){
+return this.$store.state.userEmail
    }
  }
 
@@ -257,7 +262,10 @@ position: absolute;
 z-index: 1;
 padding-top: 24px;
 }
-
+.username{
+  font-size:12px;
+  font-weight:600;
+}
 .tab li{
   padding: 15px 16px;
 }
@@ -303,7 +311,6 @@ input{
   width: 80%;
 }
 .payment-section{
-  /* border-top: 0.5px solid grey; */
   background: #ebe5f0;
   padding: 20px;
 }
