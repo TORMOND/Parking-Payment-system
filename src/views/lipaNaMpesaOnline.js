@@ -20,8 +20,8 @@ app.get('/', (req,res)=>{
 function accesstoken(req, res, next){
 
     const endpoint = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
-    const consumer_key = "nxf4GvGTQfTJOdzf5zvEw9QK8grbacS2"
-   const consumer_secret = "I8yrYYZm3LwDGAeK"
+    const consumer_key = ""
+   const consumer_secret = ""
 
     const auth = new Buffer(consumer_key + ":" + consumer_secret).toString('base64')
 

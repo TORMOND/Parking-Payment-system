@@ -119,7 +119,7 @@ this.$router.push('/NavigationPage')
   },
   generateMaps:function(){
  const loader = new Loader({
-  apiKey: "AIzaSyCmv_uQG7v271XKKOLcrscQH3vCBkXP65o",
+  apiKey: "",
   version: "weekly",
   // ...additionalOptions,
 });

@@ -11,7 +11,7 @@ import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWith
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyCgWimz22t3Qa0rDxFrCw7mQLKtLKCSk4A",
+  apiKey: "",
   authDomain: "parking-ticketing-system.firebaseapp.com",
   projectId: "parking-ticketing-system",
   storageBucket: "parking-ticketing-system.appspot.com",
