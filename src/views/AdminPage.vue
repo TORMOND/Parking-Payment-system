@@ -52,7 +52,8 @@
                </li>
              <li>
                <p v-if="lists" >Settings</p>
-               <font-awesome-icon class="icons" icon="gear" /></li>
+               <font-awesome-icon class="icons" icon="gear" />
+               </li>
              <li>
                <p v-show="lists" >LogOut</p>
            <font-awesome-icon class="icons" icon="right-from-bracket" />
@@ -196,7 +197,7 @@ closeModal:function(){
           }
     
       },
-        onFileSelected:function(event){
+    onFileSelected:function(event){
             console.log("file selected");
 const files = event.target.files;
 let filename = files[0].name;
@@ -252,7 +253,6 @@ const colRef = collection(db,'Maps');
     locationId:this.num,
      url:url,
     createdAt:serverTimestamp(),
-    type:this.image.type,
     });
       
   })

@@ -8,7 +8,7 @@ const routes = [
     component: Home
   },
   {
-    path: '/about',
+    path: '/About',
     name: 'About',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -55,6 +55,22 @@ const routes = [
    
     component: function () {
       return import( '../views/AdminPage.vue')
+    }
+  },
+  {
+    path: '/Settings',
+    name: 'Settings',
+   
+    component: function () {
+      return import( '../views/Settings.vue')
+    }
+  },
+  {
+    path: '/FeedbackPage',
+    name: 'FeedbackPage',
+   
+    component: function () {
+      return import( '../views/FeedbackPage.vue')
     }
   },
 ]

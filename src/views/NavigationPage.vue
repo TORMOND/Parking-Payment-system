@@ -2,17 +2,34 @@
   <div v-if="user !=null" id="homePage">
     <div class="tab">
       <div class="close">
-        <p @click="untoggleMenu">X</p>
+        <p @click="untoggleMenu"><font-awesome-icon icon="rectangle-xmark" /></p>
         </div>
           <ul>
              <li>Transactions</li>
-             <li>About</li>
-             <li>Contact Us</li>
-             <li>Settings</li>
-             <li>LogOut</li>
+             <li @click="aboutPage">About</li>
+             <li @click="feedbackPage">
+               <p>Contact Us</p>
+               <font-awesome-icon icon="phone" />
+               </li>
+             <li @click="settingsPage">
+               <p> Settings</p>
+              
+               <font-awesome-icon class="icons" icon="gear" />
+             </li>
+             <li @click="logout">
+               <p>LogOut</p>
+               <font-awesome-icon class="icons" icon="right-from-bracket" />
+             </li>
           </ul>
     </div>
-
+<div class="search-Filter" v-if="this.input !=='' ">
+  <p>Mombasa</p>
+  <p>Nairobi</p>
+  <p>Nakuru</p>
+  <p>Kiambu</p>
+  <p>Kisumu</p>
+  <p>Eldoret</p>
+</div>
 <div class="ticket-details" v-if="ticket">
   <div class="top-part">
     <h2>Ticket</h2>
@@ -71,7 +88,7 @@
 <h3>Find the best Vehicle Parking Space</h3>
 </div>
 <div class="search-bar">
-  <input type="text" placeholder="Search Parking">
+  <input type="text" placeholder="Search Parking"  v-model="input">
   
    <button>
     <font-awesome-icon icon="magnifying-glass" />
@@ -158,7 +175,8 @@ data() {
     ticket:false,
     name: "",
     currentUserId: "",
-    profilePic:""
+    profilePic:"",
+    input:'',
   }
 },
 methods: {
@@ -174,7 +192,6 @@ tab.style.display = "none";
 const container = document.querySelector('#container');
 container.classList = "";
   },
-
 noUser:function(){
     if(this.user == null){
       this.$router.push('/');
@@ -182,7 +199,24 @@ noUser:function(){
       console.log("user present",this.$store.state.user);
     }
   },
-
+aboutPage:function(){
+this.$router.push('/About');
+},
+feedbackPage:function(){
+this.$router.push('/FeedbackPage');
+},
+settingsPage:function(){
+this.$router.push('/Settings');
+},
+logout:function(){
+  signOut(auth).then(() => {
+    // Sign-out successful.
+    this.$router.push('/')
+  }).catch((err) => {
+    // An error happened.
+    console.log("An error occured while signing out:"+ err)
+  });
+},
 showTicket:function(){
     this.ticket = true;
 const container = document.querySelector('#container');
@@ -199,6 +233,7 @@ container.classList = "";
   maps:function(){
 this.$router.push('/MapsPage');
   },
+  
 },
 beforeMount(){
     this.noUser();
@@ -236,6 +271,22 @@ opacity: 0.2;
 pointer-events: none;
 scroll-behavior:none;
 }
+.search-Filter{
+  background-color: #fff;
+ box-shadow: 3px 3px 3px #ceced1, 3px 3px 3px #c6c6c9, 3px 3px 3px #ceced1;
+ position:absolute;
+ z-index:1;
+ margin-top:56%;
+ margin-left: 3%;
+ width: 78%;
+}
+.search-Filter p{
+  cursor: pointer;
+  padding: 5px 10px;
+}
+.search-Filter p:hover{
+  background-color: #6ba4ee;
+}
 .top-part{
   display: flex;
  justify-content: space-between;
@@ -247,6 +298,9 @@ scroll-behavior:none;
 .close{
   border-radius: 50%;
   cursor: pointer;
+  display: flex;
+  justify-content: flex-start;
+padding: 2px 30px;
 }
 .close:hover{
 background-color: #ceced1;
@@ -268,7 +322,11 @@ padding-top: 24px;
 }
 .tab li{
   padding: 15px 16px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
 }
+
 .top-section{
  background: linear-gradient(-135deg, #f0e5ef, #3e56cc); 
 }

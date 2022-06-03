@@ -1,6 +1,6 @@
 <template>
   <div>
-      <h1>Settings Page</h1>
+      <h1>Contact Us</h1>
   </div>
 </template>
 

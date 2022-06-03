@@ -119,14 +119,11 @@ const container = document.querySelector('#main-content');
 container.classList = "active";
 
 const colRef = collection(db,'tickets');
-
   addDoc(colRef, {
       location: this.$store.state.location,
       amount:this.$store.state.price,
-      transactionId: user.uid,
-      UserName: this.$store.state.UserName,
-      VehicleNumber: "",
-      PhoneNumber: ""
+      VehicleNumber: "KVC 0001",
+      PhoneNumber: "0780060995"
     });
 
 }

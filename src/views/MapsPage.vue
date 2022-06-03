@@ -4,8 +4,6 @@
 <font-awesome-icon @click="homePage" class="icon" icon="arrow-left-long"/>
 </div>
 
-
-
       <div id="maps"></div>
 
       <div id="locations" >
@@ -104,9 +102,9 @@
 
 <script>
 import { Loader } from "@googlemaps/js-api-loader"
-export default {
+const { GOOGLE_KEY} = require('./GoogleApi.js')
 
-// AIzaSyCmv_uQG7v271XKKOLcrscQH3vCBkXP65o
+export default {
 
 data() {
   return {
@@ -119,7 +117,7 @@ this.$router.push('/NavigationPage')
   },
   generateMaps:function(){
  const loader = new Loader({
-  apiKey: "",
+  apiKey:GOOGLE_KEY,
   version: "weekly",
   // ...additionalOptions,
 });
@@ -169,7 +167,8 @@ var parkingSpot = this.$store.state.location = "Nakuru"
         var price =  this.$store.state.price = "420"
   this.$store.commit('update', parkingSpot, price)
  this.$router.push('/NavigationPage')
-      }
+      },
+     
       
  },
  beforeMount(){
@@ -184,6 +183,7 @@ var parkingSpot = this.$store.state.location = "Nakuru"
   margin: 0;
   display: flex;
   align-items: flex-start;
+  
 }
 
 .maps-page{
