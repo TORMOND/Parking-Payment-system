@@ -133,20 +133,6 @@ app.get('/simulate', accesstoken, (req,res) => {
 })
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // class Post {
 //     constructor(title, link, author, img) {
 //       this.title = title;

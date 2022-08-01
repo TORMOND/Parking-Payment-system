@@ -128,9 +128,8 @@ loader.load().then(() => {
     zoom: 8,
   });
 }).catch(error =>{
-  console.log(error,"Cannot connect to google maps")
+  console.log(error,"Cannot connect to google maps");
 })
-
       },
       optionOne:function(){
         var parkingSpot = this.$store.state.location = "Nairobi"
@@ -183,14 +182,12 @@ var parkingSpot = this.$store.state.location = "Nakuru"
   margin: 0;
   display: flex;
   align-items: flex-start;
-  
 }
 
 .maps-page{
   background-color: rgb(220, 220, 236);
   height: 100vh;
   width:100%;
-  
 }
 .gm-control-active{
   margin-top:-20px;
@@ -273,12 +270,12 @@ cursor: pointer;
 }
 
 @media all and (min-width:500px){
-  #locations{
+#locations{
   grid-auto-columns: 37%;   
   height: 34vh;
   margin-top: -240px;
   } 
-  .image{
+.image{
   width: 50%;
 height:90%;
 }

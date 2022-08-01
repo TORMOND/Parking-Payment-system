@@ -30,7 +30,6 @@ const auth = getAuth(app);
 const user = auth.currentUser;
 
 export {
-   
   app, db, auth, firebaseConfig, user, analytics, createUserWithEmailAndPassword, signInWithEmailAndPassword, collection, signOut, setDoc, getDocs, onAuthStateChanged, doc,
   getStorage, ref, uploadBytes, getDownloadURL, listAll,  serverTimestamp, addDoc
 }

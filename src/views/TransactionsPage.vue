@@ -12,9 +12,11 @@
 <font-awesome-icon @click="homePage" icon="arrow-left-long"/>
 </div>
 
- <div class="profile">
-<img src="profilePic.jpg" alt="profile-pic" class="profilepic">
-  </div>
+ <div class="userProfile">
+<font-awesome-icon class="userIcon" v-if="profilePic == '' "   icon="circle-user" />
+<img src="profilePic.jpg" alt="profile-pic" class="profilepic" v-else>
+
+</div>
       </nav>
         <div class="amt-details">
            <span>You are about to pay</span>
@@ -40,7 +42,7 @@
   </div>
   <div class="phone">
     <span>Phone No.</span>
-    <p>0720220200</p>
+    <p>0707764789</p>
   </div>
 </div>
 <div class="payment">
@@ -100,12 +102,13 @@
 </template>
 
 <script>
-import{ app, db, auth, firebaseConfig, user, collection,  setDoc, addDoc,  serverTimestamp } from '@/firebase.js'
+import { app, db, auth, firebaseConfig, user, collection,  setDoc, addDoc,  serverTimestamp } from '@/firebase.js'
 
 export default {
 data() {
   return {
     amount: 500,
+    profilePic: '',
     load:false,
   }
 },
@@ -152,6 +155,19 @@ position: relative;
  margin-top: 55%;
  margin-left:40%
  
+}
+.userIcon{
+  color: rgb(160, 158, 158);
+   font-size: 28px; 
+}
+.userProfile{
+  width:32px;
+  height: 32px;
+  border-radius: 50%;
+background-color:#ceced1;
+display:flex;
+justify-content:center;
+align-items: center;
 }
  #main-content{
    display:flex;

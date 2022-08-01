@@ -1,8 +1,11 @@
 <template>
   <div v-if="user !=null" id="homePage">
     <div class="tab">
-      <div class="close">
-        <p @click="untoggleMenu"><font-awesome-icon icon="rectangle-xmark" /></p>
+      <div class="closer">
+        <p @click="untoggleMenu">
+        <font-awesome-icon class="cancel" icon="xmark" />
+        
+        </p>
         </div>
           <ul>
              <li>Transactions</li>
@@ -22,14 +25,13 @@
              </li>
           </ul>
     </div>
+
 <div class="search-Filter" v-if="this.input !=='' ">
-  <p>Mombasa</p>
-  <p>Nairobi</p>
-  <p>Nakuru</p>
-  <p>Kiambu</p>
-  <p>Kisumu</p>
-  <p>Eldoret</p>
+ <ul>
+  <li v-for="location in filteredList" :key="location">{location}</li>
+ </ul>
 </div>
+
 <div class="ticket-details" v-if="ticket">
   <div class="top-part">
     <h2>Ticket</h2>
@@ -46,11 +48,11 @@
 </div>
  <div class="details">
   <span>Paid By:</span>
-  <p>Victor Monderu</p>
+  <p>Victor </p>
 </div>
  <div class="details">
   <span>Phone Number</span>
-  <p>0790222001</p>
+  <p>+254 707764789</p>
 </div>
  <div class="details">
   <span>Location</span>
@@ -75,8 +77,15 @@
     <div class="top-section">
 <nav class="nav-bar">
   <div class="profile">
-<img src="profilePic.jpg" alt="profile-pic" class="profilepic">
-<p class="username">Hi {{userEmail}}</p>
+
+<div class="userProfile">
+<font-awesome-icon class="userIcon" v-if="profilePic == '' "   icon="circle-user" />
+<img src="profilePic.jpg" alt="profile-pic" class="profilepic" v-else>
+
+</div>
+    
+
+<!-- <p class="username" v-if="user">Hi {{user}}</p> -->
   </div>
 
   <div class="menu">
@@ -159,6 +168,9 @@
 
 </div>
 
+
+
+
 </div>
 
 </div>
@@ -166,6 +178,7 @@
 </template>
 
 <script>
+
 import{ app, db, auth, firebaseConfig, user, signOut, collection, onAuthStateChanged, getDocs } from '@/firebase.js'
 
 export default {
@@ -177,6 +190,7 @@ data() {
     currentUserId: "",
     profilePic:"",
     input:'',
+    locations: ['Nairobi', 'Mombasa', 'Kiambu', 'Nakuru', 'Kisumu', 'Naivasha']
   }
 },
 methods: {
@@ -214,7 +228,7 @@ logout:function(){
     this.$router.push('/')
   }).catch((err) => {
     // An error happened.
-    console.log("An error occured while signing out:"+ err)
+    console.log("An error occured while signing out:"+ err);
   });
 },
 showTicket:function(){
@@ -233,13 +247,19 @@ container.classList = "";
   maps:function(){
 this.$router.push('/MapsPage');
   },
-  
+
 },
 beforeMount(){
-    this.noUser();
-    
+    this.noUser(); 
  },
  computed:{
+
+filteredList() {
+        return this.locations.filter(location => {
+         return location.title.toLowerCase().includes(this.search.toLowerCase())
+       })
+      },
+  // Vuex state management
    location(){
      return this.$store.state.location
    },
@@ -247,8 +267,7 @@ beforeMount(){
      return this.$store.state.price
    },
    userInfor(){
-     return this.$store.state.user
-    
+     return this.$store.state.user    
    },
    userEmail(){
 return this.$store.state.userEmail
@@ -280,6 +299,19 @@ scroll-behavior:none;
  margin-left: 3%;
  width: 78%;
 }
+.userIcon{
+  color: rgb(160, 158, 158);
+   font-size: 28px; 
+}
+.userProfile{
+  width:32px;
+  height: 32px;
+  border-radius: 50%;
+background-color:#ceced1;
+display:flex;
+justify-content:center;
+align-items: center;
+}
 .search-Filter p{
   cursor: pointer;
   padding: 5px 10px;
@@ -295,16 +327,14 @@ scroll-behavior:none;
 .top-part h2{
   margin: 0 auto;
 }
-.close{
+.closer{
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   justify-content: flex-start;
 padding: 2px 30px;
 }
-.close:hover{
-background-color: #ceced1;
-}
+
 .tab{
 display:none;
 flex-direction: column;
@@ -317,6 +347,7 @@ z-index: 1;
 padding-top: 24px;
 }
 .username{
+  margin-top: 10px;
   font-size:12px;
   font-weight:600;
 }
@@ -474,26 +505,21 @@ input{
 .details{
   display: flex;
   justify-content: space-between;
-
   padding: 10px;
 }
 .element1{
-  /* background-image: url('./images.jpg'); */
   object-fit: cover;
   opacity: 0.9;
 }
 .element2{
-  /* background-image: url(./images.jpg); */
    object-fit: cover;
   opacity: 0.9;
 }
 .element3{
-  /* background-image: url(./images.jpg); */
    object-fit: cover;
   opacity: 0.9;
 }
 .element4{
-  /* background-image: url(./images.jpg); */
    object-fit: cover;
   opacity: 0.9;
 }
@@ -516,7 +542,9 @@ border-radius: 50%;
 .admin-details{
     display: none;
   }
-
+.cancel{
+  font-size: 24px ;
+}
 @media all and (min-width:500px){
   .admin-details{
     display: block;
@@ -524,18 +552,28 @@ border-radius: 50%;
   .top-section{
  background: linear-gradient(-135deg, #7d2ce7, #010620); 
 }
+.tab{
+display:block;
+flex-direction: column;
+background: #010620;
+color: #f0e5ef;
+height: 100%;
+width:25%;
+ position: fixed;
+z-index: 1;
+padding-top: 24px;
+}
 .input{
     margin: 0 auto;
   }
-#main-section{
+/* #main-section{
   display: grid;
   grid-auto-flow: column;
-}
-.activities{
-  grid-auto-flow: row;
+} */
+.activities{ 
   gap: 10px;
   overflow-y: auto;
-  grid-auto-columns: 80%;
+  grid-auto-columns: 27%;
 }
 .ticket-details{
    border: none;

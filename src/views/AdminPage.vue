@@ -4,7 +4,6 @@
     <div id="modal" v-if="modal" >
     <div class="create">
         <h2> New Location</h2>
-      <!-- <button @click="open" v-if="closed">X</button> -->
       <button @click="closeModal">X</button> 
     </div>
      
@@ -69,10 +68,12 @@
     <div class="top-section">
 <nav class="nav-bar">
     <div class="wrap"></div>
-  <div class="profile">
-<img src="profilePic.jpg" alt="profile-pic" class="profilepic">
 
-  </div>
+ <div class="userProfile">
+<font-awesome-icon class="userIcon" v-if="profilePic == '' "   icon="circle-user" />
+<img src="profilePic.jpg" alt="profile-pic" class="profilepic" v-else>
+
+</div>
 
  
 </nav>
@@ -86,7 +87,7 @@
  <option v-for="location in locations" :key="location">{{location}}</option>
 </select>
 
-  <input type="text" placeholder="Search Vehicle">
+  <input type="text" placeholder="Search Vehicle" class="search-input">
   <button>
     <font-awesome-icon icon="magnifying-glass" />
   </button>
@@ -118,8 +119,12 @@
 
   <div class="admin-profile">
     <div class="admin-image">
-    <img src="profilePic.jpg" alt="profile-pic" class="profilepic">
-      <div class="name">Victor Monderu</div>
+
+<font-awesome-icon class="userIcon" v-if="profilePic == '' "   icon="circle-user" />
+<img src="profilePic.jpg" alt="profile-pic" class="profilepic" v-else>
+
+
+      <div class="name">Victor</div>
       <div class="job-position">Project Manager</div>
       <div class="email">victormonderu@gmail.com</div>
 
@@ -151,6 +156,7 @@ export default {
           lists:true,
           charges: '',
           num:'',
+          profilePic: '',
           locations: ['Nairobi', 'Westlands','Mombasa','Kisumu', 'Kiambu','Nakuru', 'Naivasha'],
           paidSlots: [
               {vehicle: "KDA 001A", name:"Victor Mon", phoneNumber: "0726465191"},
@@ -163,7 +169,7 @@ export default {
               {vehicle: "KDF 234P", name:"Samuel", phoneNumber: "0795467842"},
               {vehicle: "KDA 987N", name:"Martin", phoneNumber: "0707858678"},
               {vehicle: "KDB 765S", name:"Jack Daniel", phoneNumber: "0734679574"},
-              {vehicle: "KDC 657B", name:"Victor Mon", phoneNumber: "0721297058"},
+              {vehicle: "KDC 657B", name:"Victor Don", phoneNumber: "0721297058"},
               {vehicle: "KCP 445E", name:"Victor Mon", phoneNumber: "0742198647"}
           ]
         }
@@ -192,10 +198,9 @@ closeModal:function(){
          this.imageUrl= null
       },
         pickFile:function(){
-          if(this.lists= true){
+          if(this.lists === true){
          this.$refs.fileInput.click()   
-          }
-    
+          } 
       },
     onFileSelected:function(event){
             console.log("file selected");
@@ -240,12 +245,6 @@ const uploadTask = uploadBytes(storageRef,this.image, metadata).then(()=>{
   
 const user = auth.currentUser;
 
-var number;
-number = Math.random()*10000
-this.num =number
-
-console.log(this.num)
-
 const colRef = collection(db,'Maps');
  
  addDoc(colRef, { 
@@ -276,6 +275,10 @@ this.remarks = ''
 #homePage{
   background: #f0e5ef;
   width: 100%;
+}
+.userIcon{
+  color: rgb(160, 158, 158);
+   font-size: 28px; 
 }
 .menu{
   display: none;
@@ -378,7 +381,15 @@ input{
   font-weight: 600;
   cursor:pointer;
 }
-
+.userProfile{
+  width:32px;
+  height: 32px;
+  border-radius: 50%;
+background-color:#ceced1;
+display:flex;
+justify-content:center;
+align-items: center;
+}
 .admin-details{
   border-top: 0.5px solid grey;
   padding: 16px;
@@ -467,10 +478,15 @@ gap: 50px;
   color:black;
   cursor: pointer;
 }
-input{
+.search-input{
   margin: 0 auto;
   padding:10px 5px 10px 40px;
   width:500px;
+}
+.price-input{
+ margin: 0 auto;
+  padding:10px 5px 10px 40px;
+  width:90%;
 }
 .location-details{
     padding-left: 80px;
