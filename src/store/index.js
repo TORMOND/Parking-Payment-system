@@ -1,6 +1,5 @@
 import { createStore } from 'vuex'
-import{ app, db, auth, firebaseConfig, user, signInWithEmailAndPassword, 
-  signOut, collection, onAuthStateChanged, getDocs } from '@/firebase.js'
+
 export default createStore({
   state: {
     location: 'Nairobi',
@@ -8,6 +7,10 @@ export default createStore({
     user:null,
     userId: "",
     userEmail: null,
+    userName:'',
+    userPhoneNumber:'',
+    userProfile:'',
+    vehicleReg:'',
   },
   mutations: {
      update(state,payload){

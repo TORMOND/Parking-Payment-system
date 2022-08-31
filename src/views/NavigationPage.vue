@@ -1,41 +1,25 @@
 <template>
   <div v-if="user !=null" id="homePage">
     <div class="tab">
-      <div class="closer">
+       <div class="closer">
         <p @click="untoggleMenu">
         <font-awesome-icon class="cancel" icon="xmark" />
         
         </p>
         </div>
-          <ul>
-             <li>Transactions</li>
-             <li @click="aboutPage">About</li>
-             <li @click="feedbackPage">
-               <p>Contact Us</p>
-               <font-awesome-icon icon="phone" />
-               </li>
-             <li @click="settingsPage">
-               <p> Settings</p>
-              
-               <font-awesome-icon class="icons" icon="gear" />
-             </li>
-             <li @click="logout">
-               <p>LogOut</p>
-               <font-awesome-icon class="icons" icon="right-from-bracket" />
-             </li>
-          </ul>
+   <Tab @aboutPage="aboutPage" @feedbackPage="feedbackPage" @logout="logout" @settingsPage="settingsPage" />
     </div>
 
-<div class="search-Filter" v-if="this.input !=='' ">
+<!-- <div class="search-Filter" v-if="this.input !=='' ">
  <ul>
-  <li v-for="location in filteredList" :key="location">{location}</li>
+   <li v-for="location in filteredList" :key="location">{location}</li> 
  </ul>
-</div>
+</div> -->
 
 <div class="ticket-details" v-if="ticket">
   <div class="top-part">
     <h2>Ticket</h2>
-    <p @click="hideTicket" class="close">X</p>
+    <p @click="hideTicket" class="close"> <font-awesome-icon class="cancel" icon="xmark" /></p>
   </div>
   
   <div class="details">
@@ -73,27 +57,40 @@
 
 </div>
 
-            <div id="container">
+      <div id="container">
+        <div class="side-menu">
+
+ 
+  <div class="admin-profile">
+    <div class="admin-image">
+   <font-awesome-icon class="userIcon-menu" v-if="profilePic == profilePic "   icon="circle-user" />
+   <img :src="profilePic" alt="profile-pic" class="profilepic" v-else>
+
+    </div>
+  </div>
+
+ <Tab @aboutPage="aboutPage" @feedbackPage="feedbackPage" @logout="logout" @settingsPage="settingsPage" />
+        </div>
+
+            <div class="contain">
     <div class="top-section">
 <nav class="nav-bar">
   <div class="profile">
 
 <div class="userProfile">
 <font-awesome-icon class="userIcon" v-if="profilePic == '' "   icon="circle-user" />
-<img src="profilePic.jpg" alt="profile-pic" class="profilepic" v-else>
+<img :src="profilePic" alt="profile-pic" class="profilepic" v-else>
 
 </div>
-    
 
-<!-- <p class="username" v-if="user">Hi {{user}}</p> -->
   </div>
 
   <div class="menu">
-      <!-- <font-awesome-icon :icon="['fab', 'youtube']"/> -->
 <font-awesome-icon class="menu-icon" @click="toggleMenu" icon="align-justify"/>
   </div>
 </nav>
 <div class="description">
+  <h4>Hello {{name}}</h4>
 <h3>Find the best Vehicle Parking Space</h3>
 </div>
 <div class="search-bar">
@@ -149,46 +146,32 @@
 <button class="pay" @click="pay">Pay</button>
 </div>
 
- <div class="admin-details">
-  <h2>Admins</h2>
-
-  <div class="admin-profile">
-    <div class="admin-image">
-    <img src="profilePic.jpg" alt="profile-pic" class="profilepic">
-      <div class="name">Victor Monderu</div>
-      <div class="job-position">0700100100</div>
-      <div class="email">victormonderu@gmail.com</div>
-      <div class="vehicle-registration">KBV 0001A</div>
-
-<div class="btn">
-  <button>Edit Profile</button>
+ 
 </div>
-    </div>
-  </div>
-
-</div>
-
-
-
-
-</div>
+            </div>
 
 </div>
   </div>
 </template>
 
 <script>
+import{ app, db, auth, user, setDoc, doc, collection, onAuthStateChanged, query, where,  onSnapshot, serverTimestamp, signOut, getDocs   } from '@/firebase.js'
 
-import{ app, db, auth, firebaseConfig, user, signOut, collection, onAuthStateChanged, getDocs } from '@/firebase.js'
-
+import Tab from '@/components/TabMenu.vue'
 export default {
+  components: {
+    Tab
+  },
 data() {
   return {
     user:"Victor",
     ticket:false,
     name: "",
     currentUserId: "",
+    phoneNumber:'',
+    email:'',
     profilePic:"",
+    vehicleReg:'',
     input:'',
     locations: ['Nairobi', 'Mombasa', 'Kiambu', 'Nakuru', 'Kisumu', 'Naivasha']
   }
@@ -247,13 +230,43 @@ container.classList = "";
   maps:function(){
 this.$router.push('/MapsPage');
   },
+fetchData:function(){
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+let currentUser = auth.currentUser
+const userRef = collection(db, 'userDetails');
+const q = query(userRef, where("email", "==", currentUser.email));
+onSnapshot(q, (snapshot)=>{
+    snapshot.docs.forEach((doc)=>{
+          this.name = doc.data().name;
+          this.profilePic = doc.data().url;      
+          this.currentUserId = doc.data().id;  
+          this.phoneNumber =doc.data().phoneNumber
+          this.email = doc.data().email
+          this.vehicleReg =doc.data().carReg
+    })
 
+    var personName =  this.$store.state.userName = this.name
+    var personId =  this.$store.state.userId = this.currentUserId
+    var personPhone =  this.$store.state.userPhoneNumber = this.phoneNumber
+    var personEmail =  this.$store.state.userEmail = this.email
+    var profilePic = this.$store.state.userProfile = this.profilePic
+    var carReg = this.$store.state.vehicleReg = this.vehicleReg
+    this.$store.commit('update', personName, personId, personPhone, personEmail, profilePic, carReg)
+})
+ } else {
+   console.log("no user");
+   this.$router.push('/')
+  }
+});
+
+},
 },
 beforeMount(){
     this.noUser(); 
+    this.fetchData();
  },
  computed:{
-
 filteredList() {
         return this.locations.filter(location => {
          return location.title.toLowerCase().includes(this.search.toLowerCase())
@@ -290,6 +303,10 @@ opacity: 0.2;
 pointer-events: none;
 scroll-behavior:none;
 }
+#container{
+  display:flex;
+}
+
 .search-Filter{
   background-color: #fff;
  box-shadow: 3px 3px 3px #ceced1, 3px 3px 3px #c6c6c9, 3px 3px 3px #ceced1;
@@ -301,11 +318,15 @@ scroll-behavior:none;
 }
 .userIcon{
   color: rgb(160, 158, 158);
-   font-size: 28px; 
+   font-size: 36px; 
+}
+.userIcon-menu{
+  color: rgb(160, 158, 158);
+   font-size: 128px; 
 }
 .userProfile{
-  width:32px;
-  height: 32px;
+  width:40px;
+  height: 40px;
   border-radius: 50%;
 background-color:#ceced1;
 display:flex;
@@ -351,11 +372,12 @@ padding-top: 24px;
   font-size:12px;
   font-weight:600;
 }
-.tab li{
-  padding: 15px 16px;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
+  .side-menu{
+  width:0;
+ display:none;
+}
+.contain{
+  width:100%;
 }
 
 .top-section{
@@ -373,13 +395,13 @@ font-weight: 700;
  cursor: pointer;
 }
 .profilepic{
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  border-radius:20px;
 }
 .search-bar{
   padding: 20px 10px;
-  display: flex;
+  display: inline-flex;
   gap: 10px;
 }
 .search-bar button{
@@ -397,7 +419,7 @@ input{
   padding: 5px 10px;
   border-radius: 5px;
   outline: none;
-  width: 80%;
+  /* width: 80%; */
 }
 .payment-section{
   background: #ebe5f0;
@@ -459,7 +481,7 @@ input{
   padding: 10px 0;
   display:grid;
   grid-auto-flow:column;
-  grid-auto-columns: 27%;
+  grid-auto-columns: 33%;
    gap: 10px; 
   overflow: auto;
   overscroll-behavior-inline: contain;
@@ -544,25 +566,61 @@ border-radius: 50%;
   }
 .cancel{
   font-size: 24px ;
+  cursor: pointer;
 }
 @media all and (min-width:500px){
+  .userProfile{
+    visibility: hidden;
+  }
+  .activities{
+  padding: 10px 10px;
+  display:grid;
+  grid-auto-flow:column;
+  grid-auto-columns: 24%;
+   gap: 10px; 
+ 
+  background-color: #fff;
+}
+.activities div{
+  padding-top: 15px;
+  height: 100px;
+  border-radius: 3px;
+  background: #f0e5ef;
+  border: 1px solid #3e56cc;
+}
+  .ticket-details{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  background-color: #fff;
+  margin-left: 25%;
+  margin-top: 10%;
+  transition: 2s;
+  width: 55%;
+  padding: 24px 10px;
+  border-radius: 5px;
+  box-shadow: 3px 3px 3px #ceced1, 3px 3px 3px #ceced1, 3px 3px 3px #ceced1;
+}
+  .side-menu{
+  width:25%;
+  display: flex;
+  flex-direction: column;
+background: #010620;
+color: #f0e5ef;
+height: 100vh;
+padding-top: 24px;
+}
+.contain{
+  width:75%;
+}
   .admin-details{
     display: block;
   }
   .top-section{
  background: linear-gradient(-135deg, #7d2ce7, #010620); 
 }
-.tab{
-display:block;
-flex-direction: column;
-background: #010620;
-color: #f0e5ef;
-height: 100%;
-width:25%;
- position: fixed;
-z-index: 1;
-padding-top: 24px;
-}
+
 .input{
     margin: 0 auto;
   }
@@ -570,11 +628,7 @@ padding-top: 24px;
   display: grid;
   grid-auto-flow: column;
 } */
-.activities{ 
-  gap: 10px;
-  overflow-y: auto;
-  grid-auto-columns: 27%;
-}
+
 .ticket-details{
    border: none;
 }
@@ -587,13 +641,10 @@ input{
   width: 500px;
 }
 .admin-profile{
-  background-color: #fff;
- box-shadow:  3px 3px 5px #ceced1, 3px 3px 5px #ceced1 ;
- border-radius: 5px;
+ border-bottom: 0.5px solid #ceced1;
  display: flex;
  flex-direction: column;
  padding: 20px 0px;
- height:300px;
 }
 .name{
   font-size: 16px;

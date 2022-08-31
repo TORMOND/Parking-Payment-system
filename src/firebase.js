@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getStorage, ref, uploadBytes, getDownloadURL, listAll } from "firebase/storage";
-import { getFirestore, collection, addDoc, doc, getDocs, setDoc,  serverTimestamp} from "firebase/firestore";
+import { getFirestore, collection, addDoc, doc, getDocs, setDoc,  serverTimestamp,  query, where, orderBy,  onSnapshot, updateDoc} from "firebase/firestore";
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -31,5 +31,5 @@ const user = auth.currentUser;
 
 export {
   app, db, auth, firebaseConfig, user, analytics, createUserWithEmailAndPassword, signInWithEmailAndPassword, collection, signOut, setDoc, getDocs, onAuthStateChanged, doc,
-  getStorage, ref, uploadBytes, getDownloadURL, listAll,  serverTimestamp, addDoc
+  getStorage, ref, uploadBytes, getDownloadURL, listAll,  serverTimestamp, addDoc,  query, where, orderBy,  onSnapshot, updateDoc
 }

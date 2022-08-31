@@ -33,16 +33,16 @@
     <p>{{location}}</p>
   </div>
   <div class="vehicle-reg">
-    <span>Vehicle</span>
-    <p>KDA 10R0</p>
+    <span>Vehicle:</span>
+    <p>{{carReg}}</p>
   </div>
    <div class="name">
     <span>Name:</span>
-    <p>Victor</p>
+    <p>{{userName}}</p>
   </div>
   <div class="phone">
-    <span>Phone No.</span>
-    <p>0707764789</p>
+    <span>Phone No:</span>
+    <p>{{userPhoneNumber}}</p>
   </div>
 </div>
 <div class="payment">
@@ -125,9 +125,16 @@ const colRef = collection(db,'tickets');
   addDoc(colRef, {
       location: this.$store.state.location,
       amount:this.$store.state.price,
-      VehicleNumber: "KVC 0001",
-      PhoneNumber: "0780060995"
-    });
+      PhoneNumber:this.$store.state.userPhoneNumber,
+      user:this.$store.state.userName ,
+      VehicleNumber:this.$store.state.vehicleReg,
+      createdAt:serverTimestamp()
+    }).then(()=>{
+      this.load=false
+    })
+    .catch((error)=>{
+      // console.log(error.message)
+    })
 
 }
 
@@ -138,8 +145,29 @@ computed:{
    },
    price(){
      return this.$store.state.price
+   },
+    userInfor(){
+     return this.$store.state.userName    
+   },
+   userId(){
+return this.$store.state.userId
+   },
+   userEmail(){
+return this.$store.state.userEmail
+   },
+   userPhone(){
+return this.$store.state.userPhoneNumber
+   },
+    userProfile(){
+return this.$store.state.userProfile
+   },
+ carReg(){
+return this.$store.state.vehicleReg
    }
+ 
  }
+
+ 
 }
 </script>
 

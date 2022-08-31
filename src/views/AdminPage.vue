@@ -1,6 +1,5 @@
 <template>
   <div id="homePage">
-  
     <div id="modal" v-if="modal" >
     <div class="create">
         <h2> New Location</h2>
@@ -19,7 +18,7 @@
 
 <input type="file" style="display:none;" @change="onFileSelected" ref="fileInput">
 <img :src="imageUrl"  style="overflow-y:auto">
-<!-- <iframe :src="videoUrl" class="video" v-if="video"></iframe> -->
+
 <h3>Add photo</h3>
 
 </div>
@@ -35,7 +34,7 @@
 
 
  <div class="menu" @click="toggleMenu" >
-      <!-- <font-awesome-icon :icon="['fab', 'youtube']"/> --> 
+     
       <div class="tab" >
           <ul>
              <li @click="openModal">
@@ -49,22 +48,21 @@
                <p v-if="lists" >Admins</p>
                
                </li>
-             <li>
+             <li @click="settings">
                <p v-if="lists" >Settings</p>
                <font-awesome-icon class="icons" icon="gear" />
                </li>
-             <li>
+             <li @click="logOut">
                <p v-show="lists" >LogOut</p>
            <font-awesome-icon class="icons" icon="right-from-bracket" />
            </li>
           </ul>
          
     </div>
-<!-- <font-awesome-icon class="menu-icon" @click="toggleMenu" icon="align-justify"/> -->
+
   </div>
 
   <div id="main-page"  @click="untoggle">
-   
     <div class="top-section">
 <nav class="nav-bar">
     <div class="wrap"></div>
@@ -92,8 +90,7 @@
     <font-awesome-icon icon="magnifying-glass" />
   </button>
   
-    <!-- <font-awesome-icon icon="fa-regular fa-alien-8bit" /> -->
-  
+   
 </div>
 </div>
 <div id="main-section">
@@ -104,11 +101,11 @@
   </div>
   <div class="paid-slots" v-for="item in paidSlots" :key="item">
       <span>Vehicle Reg</span>
-      <p>{{item.vehicle}}</p>
+      <p>{{item.VehicleNumber}}</p>
        <span>Name</span>
-      <p>{{item.name}}</p>
+      <p>{{item.user}}</p>
        <span>Phone</span>
-      <p>{{item.phoneNumber}}</p>
+      <p>{{item.PhoneNumber}}</p>
    <font-awesome-icon class="icons" icon="horizontal-elipsis " />   
   </div>
 </div>
@@ -143,7 +140,7 @@
 
 
 <script>
-import{ app, db, auth, firebaseConfig, user, signOut, collection, onAuthStateChanged, getDocs, getStorage, ref, uploadBytes, getDownloadURL, setDoc, doc,  serverTimestamp, addDoc } from '@/firebase.js'
+import{ app, db, auth, firebaseConfig, user, signOut, collection, onAuthStateChanged, getDocs, getStorage, ref, uploadBytes, getDownloadURL, setDoc, doc,  serverTimestamp, addDoc, query, orderBy, onSnapshot } from '@/firebase.js'
 
 export default {
     data() {
@@ -158,23 +155,22 @@ export default {
           num:'',
           profilePic: '',
           locations: ['Nairobi', 'Westlands','Mombasa','Kisumu', 'Kiambu','Nakuru', 'Naivasha'],
-          paidSlots: [
-              {vehicle: "KDA 001A", name:"Victor Mon", phoneNumber: "0726465191"},
-              {vehicle: "KCA 646D", name:"John Doe", phoneNumber: "0764570389"},
-              {vehicle: "KAT 974G", name:"Jane", phoneNumber: "0712324579"},
-              {vehicle: "KDD 557J", name:"Peter", phoneNumber: "0799575737"},
-              {vehicle: "KBR 976O", name:"Rachel", phoneNumber: "0746477478"},
-              {vehicle: "KBL 931F", name:"Joel", phoneNumber: "0722780145"},
-              {vehicle: "KCD 765K", name:"Monica", phoneNumber: "0778945678"},
-              {vehicle: "KDF 234P", name:"Samuel", phoneNumber: "0795467842"},
-              {vehicle: "KDA 987N", name:"Martin", phoneNumber: "0707858678"},
-              {vehicle: "KDB 765S", name:"Jack Daniel", phoneNumber: "0734679574"},
-              {vehicle: "KDC 657B", name:"Victor Don", phoneNumber: "0721297058"},
-              {vehicle: "KCP 445E", name:"Victor Mon", phoneNumber: "0742198647"}
-          ]
+          paidSlots: {}
         }
     },
     methods: {
+      logout:function(){
+  signOut(auth).then(() => {
+    // Sign-out successful.
+    this.$router.push('/')
+  }).catch((err) => {
+    // An error happened.
+    console.log("An error occured while signing out:"+ err);
+  });
+},
+settings:function(){
+this.$router.push('/Settings');
+},
       toggleMenu:function(){
         this.lists =true;
 const menu = document.querySelector('.menu');
@@ -264,6 +260,20 @@ this.remarks = ''
            const app = document.querySelector('#main-page');
          app.classList="";   
 },
+fetch:function(){
+  const infor = collection(db, 'tickets')
+const requests = query(infor, orderBy('createdAt', 'desc'))
+onSnapshot(requests, (snapshot)=>{
+    
+    snapshot.docs.forEach((doc)=>{
+ this.paidSlots[doc.id] = {...doc.data(), id:doc.id}
+ console.log(this.paidSlots)
+    })  
+})
+}
+    },
+    beforeMount() {
+      this.fetch()
     },
 }
 </script>
@@ -435,9 +445,7 @@ z-index: 1;
   transition: 2s;
   padding: 10px 10px;
 }
-/* .tab li :hover{
-  background-color: #0e111f;
-} */
+
 .tab{
 position:fixed;
 background: #010620;
@@ -467,7 +475,6 @@ gap: 50px;
   grid-auto-flow: column;
  
 }
-
 .admin-details{
    border: none;
    display: block;
