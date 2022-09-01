@@ -10,11 +10,6 @@
    <Tab @aboutPage="aboutPage" @feedbackPage="feedbackPage" @logout="logout" @settingsPage="settingsPage" />
     </div>
 
-<!-- <div class="search-Filter" v-if="this.input !=='' ">
- <ul>
-   <li v-for="location in filteredList" :key="location">{location}</li> 
- </ul>
-</div> -->
 
 <div class="ticket-details" v-if="ticket">
   <div class="top-part">
@@ -23,20 +18,20 @@
   </div>
   
   <div class="details">
-  <span>Transaction ID :</span>
-  <p>QW8578984G086</p>
+  <!-- <span>Transaction ID :</span>
+  <p style="font-size:12px; width:inherit;">{{ticketId}}</p> -->
 </div>
  <div class="details">
   <span>Vehicle Reg:</span>
-  <p>KDA 001A</p>
+  <p>{{vehicle}}</p>
 </div>
  <div class="details">
   <span>Paid By:</span>
-  <p>Victor </p>
+  <p>{{ticketName}}</p>
 </div>
  <div class="details">
   <span>Phone Number</span>
-  <p>+254 707764789</p>
+  <p>{{ticketPhoneNumber}}</p>
 </div>
  <div class="details">
   <span>Location</span>
@@ -44,7 +39,7 @@
 </div>
  <div class="details">
   <span>Date:</span>
-  <p>29 April 2022</p>
+  <p>2 September 2022</p>
 </div>
  <div class="details">
   <span>Time:</span>
@@ -78,9 +73,8 @@
   <div class="profile">
 
 <div class="userProfile">
-<font-awesome-icon class="userIcon" v-if="profilePic == '' "   icon="circle-user" />
+<font-awesome-icon class="userIcon" v-if="profilePic == profilePic "   icon="circle-user" />
 <img :src="profilePic" alt="profile-pic" class="profilepic" v-else>
-
 </div>
 
   </div>
@@ -93,7 +87,7 @@
   <h4>Hello {{name}}</h4>
 <h3>Find the best Vehicle Parking Space</h3>
 </div>
-<div class="search-bar">
+<div class="search-bar" style="visibility:hidden;">
   <input type="text" placeholder="Search Parking"  v-model="input">
   
    <button>
@@ -125,7 +119,7 @@
   <div class="element4">
   <font-awesome-icon class="icon" icon="address-card" />
     <p>History</p>
-    <span>13 Available</span>
+    <span>0 Available</span>
   </div>
     
 </div>
@@ -173,6 +167,11 @@ data() {
     profilePic:"",
     vehicleReg:'',
     input:'',
+    ticketName:'',
+    ticketId:'',
+    ticketPhoneNumber:'',
+    ticketPrice:'',
+    vehicle:'',
     locations: ['Nairobi', 'Mombasa', 'Kiambu', 'Nakuru', 'Kisumu', 'Naivasha']
   }
 },
@@ -215,9 +214,22 @@ logout:function(){
   });
 },
 showTicket:function(){
-    this.ticket = true;
+  this.ticket = true;
 const container = document.querySelector('#container');
 container.classList = "selected";
+
+const tickets = collection(db, 'tickets');
+const tickertQuery = query(tickets, where("userId", "==", this.currentUserId));
+onSnapshot(tickertQuery, (snapshot)=>{
+    snapshot.docs.forEach((doc)=>{
+          this.ticketName = doc.data().user;  
+          this.ticketId = doc.data().userId;  
+          this.ticketPhoneNumber =doc.data().PhoneNumber
+          this.ticketPrice = doc.data().amount
+          this.vehicle =doc.data().VehicleNumber
+    })
+})
+    
   },
  hideTicket:function(){
   this.ticket = false;
@@ -253,6 +265,8 @@ onSnapshot(q, (snapshot)=>{
     var profilePic = this.$store.state.userProfile = this.profilePic
     var carReg = this.$store.state.vehicleReg = this.vehicleReg
     this.$store.commit('update', personName, personId, personPhone, personEmail, profilePic, carReg)
+
+
 })
  } else {
    console.log("no user");
@@ -291,7 +305,6 @@ return this.$store.state.userEmail
 </script>
 
 <style scoped>
-
 #homePage{
   background: #f0e5ef;
   width: 100%;
@@ -306,7 +319,6 @@ scroll-behavior:none;
 #container{
   display:flex;
 }
-
 .search-Filter{
   background-color: #fff;
  box-shadow: 3px 3px 3px #ceced1, 3px 3px 3px #c6c6c9, 3px 3px 3px #ceced1;
@@ -395,8 +407,8 @@ font-weight: 700;
  cursor: pointer;
 }
 .profilepic{
-  width: 120px;
-  height: 120px;
+  width: 50px;
+  height: 50px;
   border-radius:20px;
 }
 .search-bar{

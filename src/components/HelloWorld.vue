@@ -43,8 +43,7 @@ console.log("Fill in required details");
           const querySnapshot = getDocs(collection(db, "userDetails"), {
 });
  querySnapshot.then((collection) => {
-  console.log(querySnapshot);
-  console.log(collection);
+ 
 
 }).catch(() => {
   console.log("Error getting document:");
@@ -58,10 +57,9 @@ this.$router.push('/AdminPage');
 
     }else if (user) {
             this.$router.push('/NavigationPage');
-            console.log(user);
     } 
     else{
-        // stop.this.$router.push('/Navigation')
+       
         alert("error");
     }
       })

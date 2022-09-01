@@ -13,7 +13,7 @@
 
 <div class="signInPage">
 <p>Already have an account</p>
-<span @click="loginPage">Sign in</span>
+<span @click.prevent="loginPage">Sign in</span>
 </div>
 
 </form>
@@ -57,15 +57,20 @@ createAccount:function(){
     });
  
 
-    });    
+    }).then(()=>{
+this.$router.push('/') 
+    })
+    
   }else{
     console.log("The passwords dont match:Please try again");
   }
-}
 },
-    loginPage:function(){
+loginPage:function(){
       this.$router.push('/');
     }
+
+},
+    
   
 
 }

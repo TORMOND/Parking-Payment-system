@@ -13,8 +13,8 @@
 </div>
 
  <div class="userProfile">
-<font-awesome-icon class="userIcon" v-if="profilePic == '' "   icon="circle-user" />
-<img src="profilePic.jpg" alt="profile-pic" class="profilepic" v-else>
+<font-awesome-icon class="userIcon" v-if="profilePic == profilePic "   icon="circle-user" />
+<img :src="profilePic" alt="profile-pic" class="profilepic" v-else>
 
 </div>
       </nav>
@@ -38,16 +38,20 @@
   </div>
    <div class="name">
     <span>Name:</span>
-    <p>{{userName}}</p>
+    <p>{{userInfor}}</p>
   </div>
   <div class="phone">
     <span>Phone No:</span>
-    <p>{{userPhoneNumber}}</p>
+    <p>{{userPhone}}</p>
   </div>
 </div>
 <div class="payment">
-  <button class="payBtn" @click="fetchApi">Make Payment</button>
+  <button class="payBtn" @click="makePayment">Make Payment</button>
 </div>
+  <div class="error" v-if="error">
+        <h4>Transaction Unsuccessfull</h4>
+        <h3>Please try again</h3>
+      </div>
 <div class="keyboard">
   <button>1</button>
   <button>2</button>
@@ -68,36 +72,33 @@
     </div>
       </div>
        
-      <div class="modal" v-if="false">
+      <div class="modal" v-if="modal">
         <div class="check"></div>
-        <p>Payment Successful</p>
-        <span>Trans ID PA234829</span>
+        <p class="modal-title">Payment Successful</p>
+        <span class="transaction-id">Trans ID PA234829</span>
         <div class="line"></div>
         <div class="section-2">
           <div class="part-1">
             <div class="date">
-              <span>Date</span>
-              <p>25 Sep 21</p>
+              <span>Date: 2 Sep 2022</span>
             </div>
-             <div class="time">
-              <span>Time</span>
-              <p>03:54 PM</p>
-            </div>
+            
           </div>
           <div class="part-2">
             <span>By</span>
-            <p>Victor Monderu</p>
-            <p>0720202020</p>
+            <p>{{userInfor}}</p>
+            <p>{{userPhone}}</p>
           </div>
           <div class="part-3">
-            <span>Total Paid Amount</span>
-            <h3>{{amount}}</h3>
+            <span>Total Paid Amount <h3>{{price}}</h3></span>  
           </div>
         </div>
         <div class="last-part">
-          <button>Done</button>
+          <button class="close-btn" @click="close">Done</button>
         </div>
       </div>
+
+    
   </div>
 </template>
 
@@ -110,13 +111,20 @@ data() {
     amount: 500,
     profilePic: '',
     load:false,
+    modal:false,
+    error:false
   }
 },
 methods: {
   homePage:function(){
     this.$router.push('NavigationPage');
   },
-fetchApi:function(){
+  close:function(){
+    const container = document.querySelector('#main-content');
+container.classList = "";
+this.modal=false
+  },
+makePayment:function(){
 this.load =true;
 const container = document.querySelector('#main-content');
 container.classList = "active";
@@ -128,12 +136,19 @@ const colRef = collection(db,'tickets');
       PhoneNumber:this.$store.state.userPhoneNumber,
       user:this.$store.state.userName ,
       VehicleNumber:this.$store.state.vehicleReg,
+      userId:this.$store.state.userId,
       createdAt:serverTimestamp()
     }).then(()=>{
       this.load=false
+      this.modal=true
     })
     .catch((error)=>{
-      // console.log(error.message)
+      console.log(error.message)
+      this.load=false
+      this.modal=false
+      this.error=true
+      const container = document.querySelector('#main-content');
+container.classList = "";
     })
 
 }
@@ -280,7 +295,7 @@ nav{
   border: none;
   padding: 16px 80px;
   border-radius: 5px;
- 
+ cursor: pointer;
 }
 .payBtn:hover{
   background-color: #040925;
@@ -300,11 +315,60 @@ nav{
 #extras{
   display: none;
 }
+.error{
+  padding:10px 50px;
+  border: 0.5px solid red;
+  color: red;
+  background-color: rgb(221, 163, 163);
+}
+.modal{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  background-color: #fff;
+  margin-left: 10%;
+  margin-top: -120%;
+  transition: 2s;
+  width: 75%;
+  padding: 24px 10px;
+  border-radius: 5px;
+  box-shadow: 3px 3px 3px #ceced1, 3px 3px 3px #ceced1, 3px 3px 3px #ceced1;
+}
+.modal-title{
+  font-weight: 600;
+  color:green;
+  padding-block: 5px;
+}
+.transaction-id{
+  font-size:14px;
+}
+.close-btn{
+  background-color:#03061a;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  padding: 10px 80px;
+  border-radius: 5px;
+ cursor: pointer;
+}
+.close:hover{
+  background-color: #040925;
+}
 @media all and (min-width:500px) {
   #main-content{
   display: flex;
     /* grid-template-columns: repeat(2, 1fr); */
   }
+  .modal{
+  margin-left: 35%;
+  margin-top: -35%;
+  width: 25%;
+  padding: 24px 10px;
+  border-radius: 5px;
+  box-shadow: 3px 3px 3px #ceced1, 3px 3px 3px #ceced1, 3px 3px 3px #ceced1;
+}
  .content{
     width: 40vw;
   }
@@ -314,6 +378,9 @@ nav{
      width: 60vw;
     display: block;
   }
-  
+  .loading{
+ margin-top: 25%;
+ margin-left:40%
+}
 }
 </style>

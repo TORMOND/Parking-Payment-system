@@ -52,7 +52,7 @@
                <p v-if="lists" >Settings</p>
                <font-awesome-icon class="icons" icon="gear" />
                </li>
-             <li @click="logOut">
+             <li @click="logout">
                <p v-show="lists" >LogOut</p>
            <font-awesome-icon class="icons" icon="right-from-bracket" />
            </li>
@@ -69,7 +69,7 @@
 
  <div class="userProfile">
 <font-awesome-icon class="userIcon" v-if="profilePic == '' "   icon="circle-user" />
-<img src="profilePic.jpg" alt="profile-pic" class="profilepic" v-else>
+<img :src="profilePic" alt="profile-pic" class="profilepic" v-else>
 
 </div>
 
@@ -168,6 +168,15 @@ export default {
     console.log("An error occured while signing out:"+ err);
   });
 },
+logout:function(){
+  signOut(auth).then(() => {
+    // Sign-out successful.
+    this.$router.push('/')
+  }).catch((err) => {
+    // An error happened.
+    console.log("An error occured while signing out:"+ err);
+  });
+},
 settings:function(){
 this.$router.push('/Settings');
 },
@@ -199,7 +208,6 @@ closeModal:function(){
           } 
       },
     onFileSelected:function(event){
-            console.log("file selected");
 const files = event.target.files;
 let filename = files[0].name;
 const fileReader = new FileReader();
@@ -267,7 +275,7 @@ onSnapshot(requests, (snapshot)=>{
     
     snapshot.docs.forEach((doc)=>{
  this.paidSlots[doc.id] = {...doc.data(), id:doc.id}
- console.log(this.paidSlots)
+//  console.log(this.paidSlots)
     })  
 })
 }

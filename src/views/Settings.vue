@@ -14,8 +14,8 @@
     <div class="admin-image">
       
 <div class="userProfile">
-<font-awesome-icon class="userIcon" v-if="profilePic == '' "   icon="circle-user" />
-<img src="profilePic.jpg" alt="profile-pic" class="profilepic" v-else>
+<font-awesome-icon class="userIcon" v-if="profilePic == profilePic "   icon="circle-user" />
+<img :src="profilePic" alt="profile-pic" class="profilepic" v-else>
 
   <label class="camera" @click="updateProfile">
     <font-awesome-icon  icon="camera" />
@@ -24,30 +24,21 @@
  <div class="wrapper">
    <div class="name">
         <span>Names:</span>
-        <p>Victor Monderu</p>
-        <font-awesome-icon icon="pencil" />
+        <p>{{userInfor}}</p>
         </div>
       <div class="job-position">
         <span>PhoneNumber</span>
-        <p>0700100100</p>
-        <font-awesome-icon icon="pencil" />
+        <p>{{userPhone}}</p>
         </div>
       <div class="email">
         <span>Email:</span>
-        <p>victormonderu@gmail.com</p>
-        <font-awesome-icon icon="pencil" />
+        <p>{{userEmail}}</p>
         </div>
       <div class="vehicle-registration">
         <span>Vehicle Reg :</span>
-        <p> KBV 0001A</p>
-        <font-awesome-icon icon="pencil" />
+        <p>{{carReg}}</p>
        </div>
  </div>
-     
-
-<!-- <div class="btn">
-  <button>Edit Profile</button>
-</div> -->
 
     </div>
   </div>
@@ -177,6 +168,34 @@ const app = document.querySelector('#container');
          this.imageUrl="";
 },
 },
+computed:{
+   location(){
+     return this.$store.state.location
+   },
+   price(){
+     return this.$store.state.price
+   },
+    userInfor(){
+     return this.$store.state.userName    
+   },
+   userId(){
+return this.$store.state.userId
+   },
+   userEmail(){
+return this.$store.state.userEmail
+   },
+   userPhone(){
+return this.$store.state.userPhoneNumber
+   },
+    userProfile(){
+return this.$store.state.userProfile
+   },
+ carReg(){
+return this.$store.state.vehicleReg
+   }
+ 
+ }
+
 }
 </script>
 
@@ -337,7 +356,7 @@ gap: 10px;
 padding: 10px;
 justify-content: space-between;
 font-size: 14px;
-border-bottom:0.5px solid #898a8b;
+/* border-bottom:0.5px solid #898a8b; */
 }
 .icon{
   display: inline-flex;
