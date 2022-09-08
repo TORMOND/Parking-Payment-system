@@ -1,6 +1,5 @@
 <template>
-  <div id="menu">
-    
+  <div id="menu"> 
           <ul>
              <li>Transactions</li>
              <li @click="aboutPage">About</li>

@@ -20,7 +20,7 @@
       </nav>
         <div class="amt-details">
            <span>You are about to pay</span>
-        <p class="amount">Ksh {{price}}</p>
+        <p class="amount">Ksh {{price*period}}</p>
 
         </div>
        
@@ -44,7 +44,47 @@
     <span>Phone No:</span>
     <p>{{userPhone}}</p>
   </div>
+  <div class="phone">
+    <span>Time Period:</span>
+    <p class="pickedTime" v-bind:value="time">{{period}} hrs</p>
+  </div>
+  <div class="phone">
+    <span>Slot:</span>
+    <p class="pickedSlot" v-bind:value="slot">{{slot}}</p>
+  </div>
+
 </div>
+<!-- <div class="slot">
+  <p>Parking Slot</p>
+<select   v-model="slot">
+  <option value="Section A">Section A</option>
+  <option value="Section B">Section B</option>
+  <option value="Section c">Section C</option>
+  <option value="Section D">Section D</option>
+  <option value="Section E">Section E</option>
+   <option value="Section F">Section F</option>
+</select>
+</div>
+<div class="time-period">
+  <p>Time(hours)</p>
+  <select v-model="time">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+  </select>
+</div>
+<div class="payment">
+<button class="payBtn" @click="applyChanges">Apply Changes</button>
+</div> -->
 <div class="payment">
   <button class="payBtn" @click="makePayment">Make Payment</button>
 </div>
@@ -52,7 +92,7 @@
         <h4>Transaction Unsuccessfull</h4>
         <h3>Please try again</h3>
       </div>
-<div class="keyboard">
+<!-- <div class="keyboard">
   <button>1</button>
   <button>2</button>
   <button>3</button>
@@ -65,7 +105,7 @@
   <button style="visibility:hidden;"></button>
   <button>0</button>
   <button>x</button>
-</div>
+</div> -->
       </div>
 <div id="extras">
 
@@ -90,7 +130,7 @@
             <p>{{userPhone}}</p>
           </div>
           <div class="part-3">
-            <span>Total Paid Amount <h3>{{price}}</h3></span>  
+            <span>Total Paid Amount <h3>{{price*period}}</h3></span>  
           </div>
         </div>
         <div class="last-part">
@@ -112,10 +152,19 @@ data() {
     profilePic: '',
     load:false,
     modal:false,
-    error:false
+    error:false,
+    time:'',
+    slot:'',
+    sections:['Section A', 'Section B', 'Section C', 'Section D','Section E', 'Section F', 'Section G'],
+    hours: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
   }
 },
 methods: {
+    applyChanges:function(){
+var chosenTime =  this.$store.state.selectedTime = this.time
+var chosenSlot =  this.$store.state.selectedSlot = this.slot
+this.$store.commit('update',chosenTime, chosenSlot)
+  },
   homePage:function(){
     this.$router.push('NavigationPage');
   },
@@ -129,14 +178,20 @@ this.load =true;
 const container = document.querySelector('#main-content');
 container.classList = "active";
 
+const date = new Date()
+const timeByHour = date.getHours()
+
 const colRef = collection(db,'tickets');
   addDoc(colRef, {
       location: this.$store.state.location,
-      amount:this.$store.state.price,
+      amount:this.$store.state.price*this.$store.state.selectedTime,
       PhoneNumber:this.$store.state.userPhoneNumber,
       user:this.$store.state.userName ,
       VehicleNumber:this.$store.state.vehicleReg,
       userId:this.$store.state.userId,
+      slot:this.$store.state.selectedSlot,
+      period:this.$store.state.selectedTime,
+      postedTime:timeByHour,
       createdAt:serverTimestamp()
     }).then(()=>{
       this.load=false
@@ -148,13 +203,19 @@ const colRef = collection(db,'tickets');
       this.modal=false
       this.error=true
       const container = document.querySelector('#main-content');
-container.classList = "";
+      container.classList = "";
     })
 
 }
 
 },
 computed:{
+  period(){
+    return this.$store.state.selectedTime
+  },
+  slot(){
+    return this.$store.state.selectedSlot
+  },
    location(){
      return this.$store.state.location
    },
@@ -187,6 +248,26 @@ return this.$store.state.vehicleReg
 </script>
 
 <style scoped>
+.time-period{
+padding:20px;
+display:flex;
+gap:10px;
+align-items:center;
+}
+.time-period select{
+  padding: 10px 20px;
+  width: 60%;
+}
+.slot{
+  display:flex;
+  padding:20px;
+  gap:10px;
+  align-items:center;
+}
+.slot select{
+ padding: 10px 20px;
+  width: 60%;
+}
 .transactions-page{
   width: 100vw;
   height: 100vh; 
@@ -197,7 +278,6 @@ position: relative;
   z-index:3;
  margin-top: 55%;
  margin-left:40%
- 
 }
 .userIcon{
   color: rgb(160, 158, 158);

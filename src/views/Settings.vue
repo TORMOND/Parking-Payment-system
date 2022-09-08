@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import{ app, db, auth, firebaseConfig, user, signOut, collection, onAuthStateChanged, getDocs, getStorage, ref, uploadBytes, getDownloadURL, setDoc, doc,  serverTimestamp, addDoc } from '@/firebase.js'
+import{ app, db, auth, firebaseConfig, user, signOut, collection, onAuthStateChanged, getDocs, getStorage, ref, uploadBytes, getDownloadURL, setDoc, doc,  serverTimestamp, addDoc, updateDoc } from '@/firebase.js'
 
 export default {
 data() {
@@ -179,6 +179,7 @@ computed:{
      return this.$store.state.userName    
    },
    userId(){
+   
 return this.$store.state.userId
    },
    userEmail(){

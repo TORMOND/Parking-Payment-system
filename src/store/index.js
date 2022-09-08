@@ -11,6 +11,8 @@ export default createStore({
     userPhoneNumber:'',
     userProfile:'',
     vehicleReg:'',
+    selectedTime:'',
+    selectedSlot:''
   },
   mutations: {
      update(state,payload){

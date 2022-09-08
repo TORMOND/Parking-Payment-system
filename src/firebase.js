@@ -8,17 +8,7 @@ import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWith
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-// const firebaseConfig = {
-//   apiKey: "AIzaSyCgWimz22t3Qa0rDxFrCw7mQLKtLKCSk4A",
-//   authDomain: "parking-ticketing-system.firebaseapp.com",
-//   projectId: "parking-ticketing-system",
-//   storageBucket: "parking-ticketing-system.appspot.com",
-//   messagingSenderId: "848057128384",
-//   appId: "1:848057128384:web:bcc803b6b2806061f62425",
-//   measurementId: "G-3TG1PZZP59"
-// };
+
 const firebaseConfig = {
   apiKey: "AIzaSyDgU3obR1wbAdZunYpQQhnNR40d5Kf-J-U",
   authDomain: "parking-ticketing-system-b0c2d.firebaseapp.com",

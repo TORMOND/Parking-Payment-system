@@ -17,10 +17,12 @@
     <p @click="hideTicket" class="close"> <font-awesome-icon class="cancel" icon="xmark" /></p>
   </div>
   
-  <div class="details">
-  <!-- <span>Transaction ID :</span>
-  <p style="font-size:12px; width:inherit;">{{ticketId}}</p> -->
+  <div class="details" v-if="expired">
+    <p class="expired">Your ticket has expired:purchase another to reserve parking space</p>
+   
 </div>
+<div class="shown-details" v-else>
+
  <div class="details">
   <span>Vehicle Reg:</span>
   <p>{{vehicle}}</p>
@@ -43,13 +45,18 @@
 </div>
  <div class="details">
   <span>Time:</span>
-  <p></p>
+  <p>{{postedTime}}</p>
 </div>
- <div class="details">
-  <span>Total Paid Amount</span>
-  <p>Ksh 500</p>
+<div class="details">
+  <span>Period:</span>
+  <p>{{period}}hr</p>
 </div>
 
+ <div class="details">
+  <span>Total Paid Amount</span>
+  <p>Ksh  {{price}}</p>
+</div>
+</div>
 </div>
 
       <div id="container">
@@ -135,9 +142,40 @@
 </div>
 <div class="price-details">
   <span>Cost Estimate</span>
-  <p>Ksh {{price}}</p>
+  <p>Ksh {{price*time}}</p>
 </div>
-<button class="pay" @click="pay">Pay</button>
+<div class="slot">
+  <p>Parking Slot</p>
+<select   v-model="slot">
+  <option value="Section A">Section A</option>
+  <option value="Section B">Section B</option>
+  <option value="Section c">Section C</option>
+  <option value="Section D">Section D</option>
+  <option value="Section E">Section E</option>
+   <option value="Section F">Section F</option>
+</select>
+</div>
+<div class="time-period">
+  <p>Time(hours)</p>
+  <select v-model="time">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+  </select>
+</div>
+<div class="payment">
+<button class="pay" @click="applyChanges">Apply Changes</button>
+</div>
+<button class="payBtn" @click="pay">Pay</button>
 </div>
 
  
@@ -172,6 +210,13 @@ data() {
     ticketPhoneNumber:'',
     ticketPrice:'',
     vehicle:'',
+    timeByHour:'',
+    slot:'',
+    period:'',
+    postedTime:'',
+     time:'1',
+    slot:'A',
+    expired:false,
     locations: ['Nairobi', 'Mombasa', 'Kiambu', 'Nakuru', 'Kisumu', 'Naivasha']
   }
 },
@@ -194,6 +239,11 @@ noUser:function(){
     }else{
       console.log("user present",this.$store.state.user);
     }
+  },
+  applyChanges:function(){
+var chosenTime =  this.$store.state.selectedTime = this.time
+var chosenSlot =  this.$store.state.selectedSlot = this.slot
+this.$store.commit('update',chosenTime, chosenSlot)
   },
 aboutPage:function(){
 this.$router.push('/About');
@@ -218,6 +268,10 @@ showTicket:function(){
 const container = document.querySelector('#container');
 container.classList = "selected";
 
+const date = new Date()
+const timeByHour = date.getHours()
+this.timeByHour = timeByHour
+
 const tickets = collection(db, 'tickets');
 const tickertQuery = query(tickets, where("userId", "==", this.currentUserId));
 onSnapshot(tickertQuery, (snapshot)=>{
@@ -227,8 +281,19 @@ onSnapshot(tickertQuery, (snapshot)=>{
           this.ticketPhoneNumber =doc.data().PhoneNumber
           this.ticketPrice = doc.data().amount
           this.vehicle =doc.data().VehicleNumber
+          this.slot = doc.data().slot
+          this.period = doc.data().period
+          this.postedTime = doc.data().postedTime
     })
 })
+if(this.postedTime + this.period < timeByHour){
+console.log("expired")
+this.expired=true
+}
+if(this.postedTime + this.period > timeByHour){
+console.log("NOT expired")
+this.expired=false
+}
     
   },
  hideTicket:function(){
@@ -327,6 +392,12 @@ scroll-behavior:none;
  margin-top:56%;
  margin-left: 3%;
  width: 78%;
+}
+.expired{
+  color:red;
+  padding: 10px 20px;
+  border:1px solid red;
+  background: rgb(252, 224, 224);
 }
 .userIcon{
   color: rgb(160, 158, 158);
@@ -516,6 +587,42 @@ input{
 .activities span{
   font-size: 12px;
   color: #747177;
+}
+.payment{
+  margin-top: 20px;
+}
+.payBtn{
+  background-color:#03061a;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  padding: 16px 80px;
+  border-radius: 5px;
+ cursor: pointer;
+}
+.payBtn:hover{
+  background-color: #040925;
+}
+.time-period{
+padding:20px;
+display:flex;
+gap:10px;
+align-items:center;
+}
+.time-period select{
+  padding: 10px 20px;
+  width: 60%;
+}
+.slot{
+  display:flex;
+  padding:20px;
+  gap:10px;
+  align-items:center;
+}
+.slot select{
+ padding: 10px 20px;
+  width: 60%;
 }
 .ticket-details{
   position: absolute;
