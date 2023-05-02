@@ -1,6 +1,8 @@
 <template>
   <div id="signup-page">
-
+ <div class="section-2">
+    
+  </div>
 <form class="signUp-form">
 <input type="text" placeholder="Full Name" required v-model="names">
 <input type="text" placeholder="Email" required v-model="mail">
@@ -20,6 +22,7 @@
 
 
   </div>
+ 
 </template>
 
 <script>
@@ -55,7 +58,6 @@ createAccount:function(){
       carReg:this.vehicleNumber,
       id:user.uid,  
     });
- 
 
     }).then(()=>{
 this.$router.push('/') 
@@ -78,23 +80,26 @@ loginPage:function(){
 
 <style>
 #signup-page{
-  background-color: rgb(7, 0, 12);
   height: 100vh;
   display: flex;
-  align-items: center;
   width: 100%;
+}
+.section-2{
+  width:50vw;
+  background-color: rgb(155, 91, 201);
 }
 .signUp-form{
   margin: auto;
   display:flex;
   flex-direction: column;
   gap:10px;
+   background-color: #fff;
+  padding: 20px;
 }
 input{
-  background-color: rgb(7, 0, 12);
-  color:grey;
-  border: 0.5px solid grey;
-  padding: 8px 20px;
+  color:rgb(44, 43, 43);
+  border: 0.5px solid rgb(39, 38, 38);
+  padding: 10px 28px;
 }
 input:focus{
   border: 0.5px solid aqua;
@@ -103,16 +108,24 @@ button{
   background-color: aqua;
   border: none;
   cursor: pointer;
-  border-radius:32px;
-  padding: 5px;
+  border-radius:16px;
+  padding: 8px 24px;
 }
 .signInPage span{
 color:aqua;
+font-weight:600;
 cursor:pointer;
 }
 .signInPage p{
 color:grey;
 }
+@media all and(max-width: 500px){
+
+}
+@media all and(min-width: 2400px){
+
+}
+
 
 
 </style>

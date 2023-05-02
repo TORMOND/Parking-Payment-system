@@ -54,7 +54,7 @@
 
  <div class="details">
   <span>Total Paid Amount</span>
-  <p>Ksh  {{price}}</p>
+  <p>Ksh {{price}}</p>
 </div>
 </div>
 </div>
@@ -94,7 +94,7 @@
   <h4>Hello {{name}}</h4>
 <h3>Find the best Vehicle Parking Space</h3>
 </div>
-<div class="search-bar" style="visibility:hidden;">
+<div class="search-bar">
   <input type="text" placeholder="Search Parking"  v-model="input">
   
    <button>
@@ -142,40 +142,10 @@
 </div>
 <div class="price-details">
   <span>Cost Estimate</span>
-  <p>Ksh {{price*time}}</p>
+  <p>Ksh {{price}} / hr</p>
 </div>
-<div class="slot">
-  <p>Parking Slot</p>
-<select   v-model="slot">
-  <option value="Section A">Section A</option>
-  <option value="Section B">Section B</option>
-  <option value="Section c">Section C</option>
-  <option value="Section D">Section D</option>
-  <option value="Section E">Section E</option>
-   <option value="Section F">Section F</option>
-</select>
-</div>
-<div class="time-period">
-  <p>Time(hours)</p>
-  <select v-model="time">
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-    <option value="7">7</option>
-    <option value="8">8</option>
-    <option value="9">9</option>
-    <option value="10">10</option>
-    <option value="11">11</option>
-    <option value="12">12</option>
-  </select>
-</div>
-<div class="payment">
-<button class="pay" @click="applyChanges">Apply Changes</button>
-</div>
-<button class="payBtn" @click="pay">Pay</button>
+
+<button class="pay" @click="pay">Pay</button>
 </div>
 
  
@@ -240,11 +210,6 @@ noUser:function(){
       console.log("user present",this.$store.state.user);
     }
   },
-  applyChanges:function(){
-var chosenTime =  this.$store.state.selectedTime = this.time
-var chosenSlot =  this.$store.state.selectedSlot = this.slot
-this.$store.commit('update',chosenTime, chosenSlot)
-  },
 aboutPage:function(){
 this.$router.push('/About');
 },
@@ -303,6 +268,9 @@ container.classList = "";
   },
   pay:function(){
     this.$router.push('/TransactionsPage');
+    var chosenTime =  this.$store.state.selectedTime = this.time
+var chosenSlot =  this.$store.state.selectedSlot = this.slot
+this.$store.commit('update',chosenTime, chosenSlot)
   },
   maps:function(){
 this.$router.push('/MapsPage');
@@ -330,7 +298,6 @@ onSnapshot(q, (snapshot)=>{
     var profilePic = this.$store.state.userProfile = this.profilePic
     var carReg = this.$store.state.vehicleReg = this.vehicleReg
     this.$store.commit('update', personName, personId, personPhone, personEmail, profilePic, carReg)
-
 
 })
  } else {
@@ -449,6 +416,8 @@ height: 70%;
 position: absolute;
 z-index: 1;
 padding-top: 24px;
+position: sticky;
+top:0;
 }
 .username{
   margin-top: 10px;
@@ -532,6 +501,7 @@ input{
   border-radius: 5px;
   border: 0.5px solid black;
   cursor:pointer;
+   background-color:#fff;
 }
 .price-details{
   padding: 10px ;

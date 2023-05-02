@@ -15,7 +15,7 @@
   <h3>Nairobi CBD Parking</h3>
   
   <div class="segment-3">
-     <p>ksh 60/hr</p>
+     <p>ksh 420/hr</p>
   <button class="select" @click="optionOne">Select</button>
   </div>
  
@@ -30,7 +30,7 @@
   <h3>Westlands Parking</h3>
  
   <div class="segment-3">
-     <p>ksh 450</p>
+     <p>ksh 450/hr</p>
   <button class="select" @click="optionTwo">Select</button>
   </div>
  
@@ -45,7 +45,7 @@
   <h3>Kisumu Parking</h3>
   
   <div class="segment-3">
-     <p>ksh 350</p>
+     <p>ksh 350/hr</p>
   <button  class="select" @click="optionThree">Select</button>
   </div>
  
@@ -59,7 +59,7 @@
   <h3>Mombasa Parking</h3>
  
   <div class="segment-3">
-     <p>ksh 420</p>
+     <p>ksh 420/hr</p>
   <button class="select" @click="optionFour">Select</button>
   </div>
  
@@ -74,7 +74,7 @@
   <h3>Kiambu Parking</h3>
 
   <div class="segment-3">
-     <p>ksh 420</p>
+     <p>ksh 420/hr</p>
   <button class="select" @click="optionFive">Select</button>
   </div>
  
@@ -88,7 +88,7 @@
   <h3>Nakuru Parking</h3>
  
   <div class="segment-3">
-     <p>ksh 420</p>
+     <p>ksh 420/hr</p>
   <button class="select" @click="optionSix">Select</button>
   </div>
  

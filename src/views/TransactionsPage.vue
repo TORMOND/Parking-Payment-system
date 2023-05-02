@@ -4,8 +4,8 @@
     <div class="loading" v-if="load">
       <img src="loading.gif">
     </div>
-    <div id="main-content">
 
+    <div id="main-content">
       <div class="content">
          <nav>
 <div class="back">
@@ -50,11 +50,11 @@
   </div>
   <div class="phone">
     <span>Slot:</span>
-    <p class="pickedSlot" v-bind:value="slot">{{slot}}</p>
+    <p class="pickedSlot" v-bind:value="slot">{{lot}}</p>
   </div>
 
 </div>
-<!-- <div class="slot">
+<div class="slot">
   <p>Parking Slot</p>
 <select   v-model="slot">
   <option value="Section A">Section A</option>
@@ -84,7 +84,7 @@
 </div>
 <div class="payment">
 <button class="payBtn" @click="applyChanges">Apply Changes</button>
-</div> -->
+</div>
 <div class="payment">
   <button class="payBtn" @click="makePayment">Make Payment</button>
 </div>
@@ -213,7 +213,7 @@ computed:{
   period(){
     return this.$store.state.selectedTime
   },
-  slot(){
+  lot(){
     return this.$store.state.selectedSlot
   },
    location(){
