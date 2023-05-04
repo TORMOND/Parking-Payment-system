@@ -133,5 +133,9 @@ cursor: pointer;
   color:red;
   font-size: 12px;
 }
-
+@media all and(max-width:500px){
+  .section-2{
+    display:none;
+  }
+}
 </style>

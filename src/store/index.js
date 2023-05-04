@@ -4,7 +4,7 @@ export default createStore({
   state: {
     location: 'Nairobi',
     price: 400,
-    user:null,
+    user:"Victor",
     userId: "",
     userEmail: null,
     userName:'',

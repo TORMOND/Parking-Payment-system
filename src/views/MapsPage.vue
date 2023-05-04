@@ -102,7 +102,7 @@
 
 <script>
 import { Loader } from "@googlemaps/js-api-loader"
-const { GOOGLE_KEY} = require('./GoogleApi.js')
+const { GOOGLE_KEY} = require('../GoogleApi.js')
 
 export default {
 

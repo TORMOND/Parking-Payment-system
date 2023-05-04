@@ -27,7 +27,8 @@
 
 <script>
 
-import{ app, db, auth, user, createUserWithEmailAndPassword, setDoc, doc, collection, onAuthStateChanged  } from '@/firebase.js'
+import { app, db, auth, user, createUserWithEmailAndPassword,
+ setDoc, doc, collection, onAuthStateChanged  } from '@/firebase.js'
 
 export default {
   name: 'SignUpPage',
@@ -119,8 +120,10 @@ cursor:pointer;
 .signInPage p{
 color:grey;
 }
-@media all and(max-width: 500px){
-
+@media all and(max-width:500px){
+ .section-2{
+    display:none;
+  }
 }
 @media all and(min-width: 2400px){
 

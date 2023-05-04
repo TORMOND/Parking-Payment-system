@@ -1,5 +1,5 @@
 <template>
-  <div v-if="user !=null" id="homePage">
+  <div v-if="user !==null" id="homePage">
     <div class="tab">
        <div class="closer">
         <p @click="untoggleMenu">
